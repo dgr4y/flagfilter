@@ -1,0 +1,65 @@
+{
+  "name": "Flag filter",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "Allows filtering posts on 4chan by flag.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "scripts": [
+      "src/background.js"
+    ],
+    "persistent": true
+  },
+  "permissions": [
+    "declarativeContent",
+    "storage",
+    "webRequest",
+    "*://a.4cdn.org/*"
+  ],
+  "page_action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Meme flag filter",
+    "default_popup": "src/popup/popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://boards.4chan.org/*/thread/*"
+      ],
+
+      "js": [
+        "lib/settings.lib.js",
+        "lib/filters.lib.js",
+        "lib/4chan.lib.js",
+        "content_scripts/thread.js"
+      ]
+    },
+
+    {
+      "matches": [
+        "*://boards.4chan.org/*"
+      ],
+
+      "exclude_matches": [
+        "*://boards.4chan.org/*/thread/*"
+      ],
+
+      "js": [
+        "lib/settings.lib.js",
+        "lib/filters.lib.js",
+        "lib/4chan.lib.js",
+        "content_scripts/board.js"
+      ],
+
+      "run_at": "document_end"
+    }
+  ]
+}
