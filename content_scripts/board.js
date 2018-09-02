@@ -4,7 +4,8 @@
 /** Hides meme posts and replies to meme posts. */
 const hideMemePosts = (threadFragment) => {
   const threadNo = threadFragment.id.match(/t(\d+)/)[1];
-  const path = `${document.location.pathname}thread/${threadNo}/`;
+  const board = document.location.pathname.match(/\/(\w+)\/.*/)[1];
+  const path = `${board}/thread/${threadNo}/`;
   Promise.all([getThread(path), createFilter()]).then(([thread, filter]) => {
     const op = thread.posts[0];
     if ([op].filter(filter).length > 0) {
