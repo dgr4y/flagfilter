@@ -1,6 +1,5 @@
 const reapplyFilters = () => {
   chrome.tabs.query({}, (tabs) => {
-    // TODO: Reapply filters on every tab.
     tabs.forEach((tab) => {
       chrome.tabs.sendMessage(tab.id, { cmd: 'reapplyFilters' });
     });
