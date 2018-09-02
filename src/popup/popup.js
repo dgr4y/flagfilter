@@ -1,8 +1,9 @@
 const reapplyFilters = () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  chrome.tabs.query({}, (tabs) => {
     // TODO: Reapply filters on every tab.
-    const activeTab = tabs[0];
-    chrome.tabs.sendMessage(activeTab.id, { cmd: 'reapplyFilters' });
+    tabs.forEach((tab) => {
+      chrome.tabs.sendMessage(tab.id, { cmd: 'reapplyFilters' });
+    });
   });
 };
 
