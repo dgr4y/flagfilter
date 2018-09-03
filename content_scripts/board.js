@@ -2,13 +2,11 @@
 /* eslint-disable no-undef */
 
 /** Hides meme posts and replies to meme posts. */
-const hideMemePosts = (threadFragment) => {
-  const threadNo = threadFragment.id.match(/t(\d+)/)[1];
-  const board = document.location.pathname.match(/\/(\w+)\/.*/)[1];
-  const path = `${board}/thread/${threadNo}/`;
-  Promise.all([getThread(path), createFilter()]).then(([thread, filter]) => {
+const hideMemePosts = (thread) => {
+  createFilter().then((filter) => {
     const op = thread.posts[0];
-    if ([op].filter(filter).length > 0) {
+    const opIsMemePost = [op].filter(filter).length > 0;
+    if (opIsMemePost) {
       hideThread(op);
     } else {
       const memeReplies = getMemePosts(thread.posts, filter);
@@ -17,11 +15,25 @@ const hideMemePosts = (threadFragment) => {
   });
 };
 
+/** Gets the threadnumber from a thread within the DOM. */
+const getThreadNumber = thread => thread.id.match(/t(\d+)/)[1];
+
+/** Gets the thread path for a thread within the DOM of the board. */
+const getPath = (thread) => {
+  const board = document.location.pathname.match(/\/(\w+)\/d*/)[1];
+  return `${board}/thread/${getThreadNumber(thread)}/`;
+};
+
 const observer = new MutationObserver((records) => {
   records.forEach((record) => {
     const threadFilter = node => node.classList.contains('thread');
     const threads = Array.from(record.addedNodes).filter(threadFilter);
-    threads.forEach(hideMemePosts);
+    threads.forEach((threadFragment) => {
+      fetchThread(getPath(threadFragment)).then((thread) => {
+        saveThread(thread);
+        hideMemePosts(thread);
+      });
+    });
   });
 });
 observer.observe(document.querySelector('.board'), { childList: true });
@@ -32,8 +44,15 @@ chrome.runtime.onMessage.addListener(({ cmd }) => {
     const hiddenPostNos = hiddenPosts.map(post => post.id.match(/\d+/)[0]);
     hiddenPostNos.forEach(showPost);
     hiddenPostNos.forEach(showThread);
-    document.querySelectorAll('.thread').forEach(hideMemePosts);
+    document.querySelectorAll('.thread').forEach((thread) => {
+      hideMemePosts(loadThread(getThreadNumber(thread)));
+    });
   }
 });
 
-document.querySelectorAll('.thread').forEach(hideMemePosts);
+document.querySelectorAll('.thread').forEach((threadFragment) => {
+  fetchThread(getPath(threadFragment)).then((thread) => {
+    saveThread(thread);
+    hideMemePosts(thread);
+  });
+});
