@@ -1,6 +1,21 @@
 /* Disable errors for functions included from other files via manifest.json. */
 /* eslint-disable no-undef */
 
+/** Shows hidden posts that are not filtered anymore. */
+const showNormalPosts = (thread) => {
+  createFilter().then((filter) => {
+    let hiddenPosts = Array.from(document.querySelectorAll('.post-hidden'));
+    const hiddenPostNos = hiddenPosts.map(post => post.id.match(/\d+/)[0]);
+    hiddenPosts = thread.posts.filter(p => hiddenPostNos.includes(`${p.no}`));
+    const hiddenMemePosts = getMemePosts(hiddenPosts, filter);
+    const normalPosts = hiddenPosts.filter(
+      post => !hiddenMemePosts.some(memePost => memePost.no === post.no),
+    );
+    normalPosts.forEach(post => showPost(post.no));
+    normalPosts.forEach(post => showThread(post.no));
+  });
+};
+
 /** Hides meme posts and replies to meme posts. */
 const hideMemePosts = (thread) => {
   createFilter().then((filter) => {
@@ -40,12 +55,10 @@ observer.observe(document.querySelector('.board'), { childList: true });
 
 chrome.runtime.onMessage.addListener(({ cmd }) => {
   if (cmd === 'reapplyFilters') {
-    const hiddenPosts = Array.from(document.querySelectorAll('.post-hidden'));
-    const hiddenPostNos = hiddenPosts.map(post => post.id.match(/\d+/)[0]);
-    hiddenPostNos.forEach(showPost);
-    hiddenPostNos.forEach(showThread);
-    document.querySelectorAll('.thread').forEach((thread) => {
-      hideMemePosts(loadThread(getThreadNumber(thread)));
+    document.querySelectorAll('.thread').forEach((threadFragment) => {
+      const thread = loadThread(getThreadNumber(threadFragment));
+      showNormalPosts(thread);
+      hideMemePosts(thread);
     });
   }
 });
