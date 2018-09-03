@@ -27,7 +27,7 @@ const move = (fragment, targetContainer) => {
 };
 
 const whitelist = (flag) => {
-  const white = document.querySelector('#flags');
+  const white = document.querySelector(`.${flag.title[0]} .flags`);
   const whitelistedFlag = move(flag, white);
   /* eslint-disable no-use-before-define */
   whitelistedFlag.onclick = (event) => { blacklist(event.target); };
@@ -42,7 +42,7 @@ const whitelist = (flag) => {
 };
 
 const blacklist = (flag) => {
-  const black = document.querySelector('#blacklist');
+  const black = document.querySelector('#filtered-flags');
   const blacklistedFlag = move(flag, black);
   blacklistedFlag.onclick = (event) => { whitelist(event.target); };
 
@@ -59,8 +59,8 @@ Papa.parse('../../res/countries.csv', {
 /* eslint-enable no-undef */
   download: true,
   header: true,
-  step: (row) => {
-    const country = row.data[0];
+  step: (line) => {
+    const country = line.data[0];
     const code = country['alpha-2'];
 
     const flag = document.createElement('img');
@@ -70,8 +70,22 @@ Papa.parse('../../res/countries.csv', {
     flag.dataset.countryCode = code;
     flag.onclick = (event) => { blacklist(event.target); };
 
-    const flagsContainer = document.querySelector('#flags');
-    flagsContainer.appendChild(flag);
+    const flagTable = document.querySelector('#flag-table');
+    let row = flagTable.querySelector(`.${country.name[0]}`);
+    if (!row) {
+      const caption = document.createElement('td');
+      caption.appendChild(document.createTextNode(country.name[0]));
+
+      const flagList = document.createElement('td');
+      flagList.classList.add('flags');
+
+      row = document.createElement('tr');
+      row.classList.add(country.name[0]);
+      row.appendChild(caption);
+      row.appendChild(flagList);
+      flagTable.appendChild(row);
+    }
+    row.querySelector('.flags').appendChild(flag);
   },
   complete: () => { console.log('done!!!'); },
 });
