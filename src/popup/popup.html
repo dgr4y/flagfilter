@@ -9,8 +9,22 @@
 	h1 {
 		font-size: 2em;
 	}
+	
 	.flag {
 		margin-left: 10pt;
+	}
+	#flag-table {
+		border-collapse: collapse;
+	}
+	#flag-table thead tr {
+		border-top: none;
+	}
+	#flag-table tr {
+		border-top: 1px solid black;
+	}
+	#flag-table td {
+		padding-top: 6pt;
+		padding-bottom: 6pt;
 	}
 </style>
 
@@ -27,8 +41,13 @@
 	</div>
 	<h3>Filter countries</h3>
 	<div id="blacklist"></div>
-	<hr>
-	<div id="flags"></div>
+	<table id="flag-table">
+		<thead>
+			<th>
+				<td colspan="2" id="filtered-flags"></td>
+			</th>
+		</thead>
+	</table>
 </form>
 
 <script type="text/javascript" src="../../lib/PapaParse/papaparse.min.js"></script>
