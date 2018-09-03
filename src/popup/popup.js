@@ -54,25 +54,24 @@ const blacklist = (flag) => {
   });
 };
 
-fetch('../../res/countries.json')
-  .then(countries => countries.json())
-  .then((countryCodes) => {
-    countryCodes.forEach((code) => {
-      const flag = document.createElement('img');
-      flag.classList.add('flag');
-      flag.src = `http://s.4cdn.org/image/country/${code.toLowerCase()}.gif`;
-      flag.dataset.countryCode = code;
-      flag.onclick = (event) => { blacklist(event.target); };
-      const flagsContainer = document.querySelector('#flags');
-      flagsContainer.appendChild(flag);
-    });
+/* eslint-disable no-undef */
+Papa.parse('../../res/countries.csv', {
+/* eslint-enable no-undef */
+  download: true,
+  header: true,
+  step: (row) => {
+    const country = row.data[0];
+    const code = country['alpha-2'];
 
-    chrome.storage.sync.get(['flags'], ({ flags }) => {
-      if (flags) {
-        flags.forEach((countryCode) => {
-          const flag = document.querySelector(`[data-country-code="${countryCode}"]`);
-          blacklist(flag);
-        });
-      }
-    });
-  });
+    const flag = document.createElement('img');
+    flag.classList.add('flag');
+    flag.src = `http://s.4cdn.org/image/country/${code.toLowerCase()}.gif`;
+    flag.title = country.name;
+    flag.dataset.countryCode = code;
+    flag.onclick = (event) => { blacklist(event.target); };
+
+    const flagsContainer = document.querySelector('#flags');
+    flagsContainer.appendChild(flag);
+  },
+  complete: () => { console.log('done!!!'); },
+});
