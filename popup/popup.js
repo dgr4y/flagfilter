@@ -87,5 +87,4 @@ Papa.parse('countries.csv', {
     }
     row.querySelector('.flags').appendChild(flag);
   },
-  complete: () => { console.log('done!!!'); },
 });
