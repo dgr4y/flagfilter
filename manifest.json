@@ -10,7 +10,7 @@
   },
   "background": {
     "scripts": [
-      "src/background.js"
+      "background.js"
     ],
     "persistent": true
   },
@@ -27,7 +27,7 @@
       "128": "icons/icon128.png"
     },
     "default_title": "Meme flag filter",
-    "default_popup": "src/popup/popup.html"
+    "default_popup": "popup/popup.html"
   },
   "content_scripts": [
     {

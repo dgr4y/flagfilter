@@ -55,7 +55,7 @@ const blacklist = (flag) => {
 };
 
 /* eslint-disable no-undef */
-Papa.parse('../../res/countries.csv', {
+Papa.parse('countries.csv', {
 /* eslint-enable no-undef */
   download: true,
   header: true,
