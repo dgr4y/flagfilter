@@ -35,7 +35,7 @@ observer.observe(document.querySelector('.thread'), { childList: true });
 
 chrome.runtime.onMessage.addListener(({ cmd }) => {
   if (cmd === 'reapplyFilters') {
-    const threadNo = document.location.pathname.match(/\/thread\/(\d+)\//)[1];
+    const threadNo = document.location.pathname.match(/\/thread\/(\d+)/)[1];
     const thread = loadThread(threadNo);
     showNormalPosts(thread);
     hideMemePosts(thread);
