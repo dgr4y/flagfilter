@@ -1,45 +1,63 @@
 <!doctype html>
-<style type="text/css">
-	#mainPopup {
-		padding: 10px;
-		height: 200px;
-		width: 400px;
-		font-family: Helvetica, Ubuntu, Arial, sans-serif;
-	}
-	h1 {
-		font-size: 2em;
-	}
+<head>
+	<link rel="stylesheet" type="text/css" href="font.css">
+	<link rel="stylesheet" href="material.min.css">
+
+	<script defer type="text/javascript" src="papaparse.min.js"></script>
+	<script defer type="text/javascript" src="popup.js"></script>
+	<script defer src="material.min.js"></script>
+	<style type="text/css">
+		#mainPopup {
+			width: 10cm;
+			height: 10cm;
+			padding-left: 5mm;
+			padding-right: 5mm;
+			overflow: scroll;
+			font-family: 'Material-Icons', sans-serif;
+		}
 	
-	.flag {
-		margin-left: 10pt;
-	}
-	#flag-table {
-		border-collapse: collapse;
-	}
-	#flag-table thead tr {
-		border-top: none;
-	}
-	#flag-table tr {
-		border-top: 1px solid black;
-	}
-	#flag-table td {
-		padding-top: 6pt;
-		padding-bottom: 6pt;
-	}
-</style>
+		form .row + .row {
+			margin-top: 1em;
+		}
+		
+		.flag {
+			margin-left: 10pt;
+		}
+		#flag-table {
+			border-collapse: collapse;
+		}
+		#flag-table thead tr {
+			border-top: none;
+		}
+		#flag-table tr {
+			border-top: 1px solid black;
+		}
+		#flag-table td {
+			padding-top: 6pt;
+			padding-bottom: 6pt;
+		}
+	</style>
+</head>
 
 <div id="mainPopup">
 <form>
-	<h2>Flag filter</h2>
-	<div>
-		<input type="checkbox" id="enabled">
-		<label for="enabled">Enable flag filter</label>
+	<h5>Flag filter</h5>
+
+	<div class="row">
+		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="enabled">
+			<input type="checkbox" id="enabled" class="mdl-switch__input" checked>
+			<span class="mdl-switch__label">filter flags</span>
+		</label>
 	</div>
-	<div>
-		<input type="checkbox" id="memeflags">
-		<label for="memeflags">Filter meme flags</label>
+
+	<div class="row">
+		<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="memeflags">
+				<input type="checkbox" id="memeflags" class="mdl-switch__input">
+				<span class="mdl-switch__label">filter meme flags</span>
+		</label>
 	</div>
-	<h3>Filter countries</h3>
+
+	<h5>Filter countries</h5>
 	<div id="blacklist"></div>
 	<table id="flag-table">
 		<thead>
@@ -49,6 +67,3 @@
 		</thead>
 	</table>
 </form>
-
-<script type="text/javascript" src="papaparse.min.js"></script>
-<script type="text/javascript" src="popup.js"></script>
