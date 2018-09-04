@@ -88,3 +88,11 @@ Papa.parse('countries.csv', {
     row.querySelector('.flags').appendChild(flag);
   },
 });
+
+chrome.storage.sync.get(['flags'], ({ flags }) => {
+  const blacklistedFlags = flags || [];
+  blacklistedFlags.forEach((countryCode) => {
+    const flag = document.querySelector(`[data-country-code="${countryCode}"`);
+    blacklist(flag);
+  });
+});
